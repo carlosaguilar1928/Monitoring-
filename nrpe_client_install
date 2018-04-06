@@ -2,3 +2,5 @@
 apt-get install -y nagios-nrpe-server nagios-plugins
 sed -i 's/allowed_hosts=127.0.0.1/allowed_hosts=127.0.0.1, 10.142.0.15/g' /etc.nagios/nrpe.cfg
 /etc/init.d/nagios-nrpe-server restart
+
+# optional- can use the "systemctl restart nagios-nrpe-server" command in plac eof the init.d command
