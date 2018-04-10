@@ -1,0 +1,17 @@
+1) What does LDAP stand for?         Lightweight Directory Access Protocol
+
+2) Why is it used in large production environments?
+- makes it easy for applications to authenticate users, most mail systems can draw large of their routing information from ldap, 
+can store additional user information, is supported by common scripting languages. 
+
+3) What does it do?
+- is a centralized directory store that contains user identity and authorization information.
+
+4) What is Kerberos?
+- kerberos is a ticket-based authentication system that uses symetric key crytography. Made mainly famous by microsoft Active Directory. 
+
+5) Why is it used in production?
+- is ideal if trying to integrate Microsoft Active Directory and your Linux system. 
+
+6) What does it do?
+- Its used for SSO purposes with Microsoft Active Directory, Linux and FreeBSD. 
