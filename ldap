@@ -1,0 +1,91 @@
+#!/bin/bash
+
+yum -y install httpd
+yum -y install epel-release
+yum -y install phpldapadmin
+
+systemctl enable httpd
+systemctl start httpd
+
+sed -i 's,Require local,#Require local\n   Require all granted,g' /etc/httpd/conf.d/phpldapadmin.conf
+
+cp NTI-310/config/config.php /etc/phpldapadmin.php
+chown ldap:apache /etc/phpldapadmin/config.php
+
+sytemctl restart httpd.service
+
+echo "phpldapadmin is now up and running"
+echo "configuring ldap and ldapadmin"
+
+newsecret=$(slappasswd -g)
+newhash=$(slappasswd -s "$newsecret")
+echo -n "$newsecret" > /root/ldap_admin_pass
+chmod 0600 /root/ldap_admin_pass
+
+echo "dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=nti310,dc=local
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootDN
+olcRootDN: cn=ldapadm,dc=nti310,dc=local
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootPW: $newhash" > db.ldif
+
+ldapmodify -Y EXTERNAL -H ldapi:/// -f db.ldif
+
+echo 'dn: olcDatabase={1}monitor,cn=config
+changetype: modify
+replace: olcAccess
+olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external, cn=auth" read by dn.base="cn=ldapadm,dc=nti310,dc=local" r
+
+ldapmodify -Y EXTERNAL -H ldapi:/// -f monitor.ldif
+
+open ssl req -new -x509 -nodes -out /etc/openldap/certs/nti310ldapcert.pem -keyout /etc/openldap/certs/nti310ldapkey.pem -days 365 -subj "/
+
+chown -R ldap. /etc/openldap/certs/nti*.pem
+
+echo "dn: cn=config
+changetype: modify
+replace: olcTLSCertificateFile
+olcTLSCertificateFile: /etc/openldap/certs/nti310ldapcert.pem
+
+dn: cn=config
+changetype: modify
+replace: olcTLSCertificateKeyFile
+olcTLSCertificateKeyFile: /etc/openldap/certs/nti310ldapkey.pem" > certs.ldif
+# vim to certs.ldif and enter spaces after each "dn" 
+
+ldapmodify -Y EXTERNAL -H ldapi:/// -f certs.ldif
+
+ldap -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+ldap -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif
+ldap -Y EXTERNAL -H ldapi:/// -f /etc/openldap/shema/inetorgperson.ldif
+
+echo "dn: dc=nti310,dc=local
+dc: nti310
+objectClass: top
+objectClass: domain
+
+dn: cn=ldapadm ,dc=nti310,dc=local
+objectClass: organizationalRole
+cn: ldapadm
+description: LDAP Manager
+
+dn: ou=People,dc=nti310,dc=local
+objectClass: organizationalUnit
+ou: People
+
+dn: ou=Group,dc=nti310,dc=local
+objectClass: organizationalUnit
+ou: Group" > base.ldif
+# vim to this file and add spaces after each dn
+
+ldapadd -x -W -D "cn=ldapadm,dc=nti310,dc=local" -f base.ldif -y /root/ldap_admin_pass
+
+
