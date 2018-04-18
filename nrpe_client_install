@@ -4,3 +4,15 @@ sed -i 's/allowed_hosts=127.0.0.1/allowed_hosts=127.0.0.1, 10.142.0.15/g' /etc.n
 /etc/init.d/nagios-nrpe-server restart
 
 # optional- can use the "systemctl restart nagios-nrpe-server" command in plac eof the init.d command
+
+wget https://raw.githubusercontent.com/carlosaguilar1928/Monitoring-/master/check_mem.sh
+mv check_mem.sh /usr/lib/nagios/plugins
+#this will poing to the check_mem.sh file inside my repository and will copy here. 
+#mv will will point the check_mem.sh to the plugin repository inside the client. 
+
+
+sed -i "s,command[check_hda1]=/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p /dev/hda1,command[check_disk]=/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p /dev/sda1,g" /etc/nagios/nrpe.cfg
+echo "command[check_mem]=/usr/lib/nagios/plugins/check_mem.sh -w 80 -c 90" >> /etc/nagios/nrpe.cfg
+
+# this should happen as part of the packaging of the rpm...
+/etc/init.d/nagios-nrpe-server restart
