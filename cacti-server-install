@@ -36,7 +36,7 @@ mysql -u cacti -p cacti < /usr/share/doc/cacti-1.0.4/cacti.sql
 vim /etc/cacti/db.php            # Set database username and password in $database_username = ''; and $database_password = '';
 
 
-/etc/httpd/conf.d/cacti.conf     # Top open up access from your subnet, external host or anywere.  Note, anywere isn't recommended
+vim /etc/httpd/conf.d/cacti.conf     # Top open up access from your subnet, external host or anywere.  Note, anywere isn't recommended
                                  # If you go that route, make a security pass when you're done and tighten it down.
 
 systemctl restart httpd.service
