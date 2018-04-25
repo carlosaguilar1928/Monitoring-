@@ -1,0 +1,105 @@
+Cacti has some prerequisites. You need to install these packages before
+installing Cacti:
+
+RRDTool1.0.49 or higher.
+NET-SNMP.
+MySQL4.1.x or higher.
+PHP 4.3.6 or higher.
+Apache/IIS or any other web server.
+
+Step 1. Install Apache using the CLI
+user$ su
+user$ apt-get install apache2
+
+Step2. Verify apache installation
+“# Open the http://localhost in your favorite browser”
+“# you should see “It Works!” on the top of the webpage”
+
+Step 3. Install PHP using the CLI
+	user$ apt-get install –y php5 libapache2-mod-php5
+	
+Step 4. Restart apache2 so that the changes of installing php take effect
+	User$ /etc/init.d/apache2 restart
+
+Step 5. Test php to verify it is working properly
+	“#create a info.php inside the /var/www directory and paste the following code 	inside the file.”
+
+	User$ vim info.php
+	<?php
+      phpinfo();
+	?>
+
+	“# open the http://localhost/info.php on your browser”
+ 
+	“# If all goes well the above image should be viewed”
+
+Step 6. Install mySql database for storing  setting, user, and display-related information.
+
+	User$ apt-get install –y mysql-server-5.0 php5-mysql
+
+	“#This will install MySQL server version 5 and PHP5-MySQL, which will 	configure PHP so that it can talk to a MySQL server.”
+
+Step 7. On the wizard enter the MySql root user password
+
+	“# be careful here, it will not ask for a confirmation of the password. Its only entered once”
+ 
+
+Step 8. restart again  apache2 so that the changes take effect
+	User$ /etc/init.d/apache2 restart
+
+Step 9. Verify again http://localhost/info.php
+
+
+Step 10. Install Net.SNMP
+
+	User$ apt-get install snmp php5-snmp
+
+Step 11. restart apache & reload http://localhost/info.php
+	$/etc/init.d/apache2 restart
+
+Step 12. Install RRDTool 
+	User$ apt-get intall rrdtool
+
+
+
+
+
+
+
+“# this resumes the installation for all the dependencies needed for our installation”
+
+
+
+INSTALL CACTI
+
+Cacti can be installed using two ways:
+1. Binary package/Using APT.
+2. Source/Manual installation.
+
+
+Way 1
+
+Step 1. install cacti using the binary package
+
+	User$ apt-get install –y cacti
+
+	“ this will prompt for a wizard installation  that will guide us” 
+	“ setup sample found on pages 21 -24”
+	“ if anything goes wrong you can restart the wizard again by using the command”
+
+	User$ dpkg-reconfigure cacti
+
+
+Step 2. open the http://localhost/cacti
+	“ this will open a webbased GUI for the final setup wizard”
+	“sample installation is found in pages 25-27 of book”
+
+Step 3. Enter default login is user=admin; password=admin and then follow instructions for creating a new password 
+
+Way 2
+
+	Step1. 	“for details on how to install cacti manually refer to book on pages 29-33”
+
+
+
+	
