@@ -52,3 +52,7 @@ End scripty part.  Further bug fixes, you'll need to update your php.ini like so
 < date.timezone = America/Regina
 ---
 > ;date.timezone =
+
+
+
+# web interface ipaddress/cacti
