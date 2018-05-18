@@ -1,0 +1,18 @@
+1. user# yum install -y rpmbuild
+
+2. user# mkdir (build,spec,sources...)
+
+3. in the SOURCE  #put the binaries or scrips  (tar.gz) 
+	# this is where we put or raw materials
+	# when you create a script ex.   Nagios.sh  you have to make it into a tarball in order for our .spec file to be able to read it. 
+User$ tar -cvzf nagios.tar.gz nagios.sh  
+	# nagios.sh is the script we just built and placed in the SOURCE folder 
+  
+4. in the SPECS directoy edit the .spec file
+	# this file is what tells us what to do with our raw materials 
+	# edit the file  to match our SOURCE file 
+
+5. use the rpmbuild command to create the RPM, this will be stored in the BUILD directory
+
+6. after the RMP is build you can issue the
+	$ yum install RPM name to install the RPM in your machine. 
