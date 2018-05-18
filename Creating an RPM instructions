@@ -1,18 +1,30 @@
-1. user# yum install -y rpmbuild
+1. install rpm-build 
+yum -y install rpm-build make gcc git 
 
-2. user# mkdir (build,spec,sources...)
+2. Build envioronement for 
+mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
-3. in the SOURCE  #put the binaries or scrips  (tar.gz) 
-	# this is where we put or raw materials
-	# when you create a script ex.   Nagios.sh  you have to make it into a tarball in order for our .spec file to be able to read it. 
-User$ tar -cvzf nagios.tar.gz nagios.sh  
-	# nagios.sh is the script we just built and placed in the SOURCE folder 
+3. change directories to the SOURCES directories
+cd SOURCES
+	# This is where we put the binaries (tar.gz) or the scripts (.sh)
+	# These are the raw materials we will use for creating the rpm 
+	# when you create a script ex. "Nagios.sh"  you have to make it into a tarball in order for our .spec file to be able to read it. 
+	
+	Example
+tar -cvzf nagios.tar.gz nagios.sh  		# nagios.sh is the script we just built and placed in the SOURCE folder 
   
-4. in the SPECS directoy edit the .spec file
+4. Change directories to the SPECS directoy edit the .spec file
 	# this file is what tells us what to do with our raw materials 
 	# edit the file  to match our SOURCE file 
 
-5. use the rpmbuild command to create the RPM, this will be stored in the BUILD directory
+5. use the rpmbuild command to create the RPM
+rpmbuild -v -bb --clean SPECS/nagios.spec
+	# this points to the .spec file in the SPEC directory
+	# this will be stored in the BUILD directory
 
-6. after the RMP is build you can issue the
-	$ yum install RPM name to install the RPM in your machine. 
+6. Change directories to the BUILD directory and issue an ls -l command to check for your file. 
+cd BUILD 
+ls -l 
+
+7. After the RPM has been built you can issue a yum command to install it in your machine
+yum install -y "RPM name"
