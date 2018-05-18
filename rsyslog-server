@@ -1,0 +1,20 @@
+vi /etc/rsyslog.conf          
+
+   #uncomment these 4 lines in the rsyslog.conf file  to open tcp and udp ports
+#$ModLoad imudp
+#$UDPServerRun 514
+    # Provides TCP syslog reception
+#$ModLoad imtcp
+#$InputTCPServerRun 514
+
+
+systemctl restart rsyslog.service
+yum install net-tools
+netstat -antup | grep 514                # make sure service is listening
+                                         # still need to secure log server
+                                         # port 514 is the designated port for rsyslog
+                                         
+                                         
+                                      
+                                      
+ 
