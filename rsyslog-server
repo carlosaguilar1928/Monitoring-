@@ -1,4 +1,6 @@
-vi /etc/rsyslog.conf          
+#!/bin/bash
+
+# vi /etc/rsyslog.conf          
 
    #uncomment these 4 lines in the rsyslog.conf file  to open tcp and udp ports
 #$ModLoad imudp
@@ -7,6 +9,10 @@ vi /etc/rsyslog.conf
 #$ModLoad imtcp
 #$InputTCPServerRun 514
 
+sed -i 's/$ModLoad imudp/^#//g' /etc/rsyslog.conf 
+sed -i 's/$UDPServerRun 514/^#//g' /etc/rsyslog.conf 
+sed -i 's/$ModLoad imtcp/^#//g' /etc/rsyslog.conf 
+sed -i 's/InputTCPServerRun 514/^#//g' /etc/rsyslog.conf 
 
 systemctl restart rsyslog.service
 yum install net-tools
