@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/bash         
 
-# vi /etc/rsyslog.conf          
-
-   #uncomment these 4 lines in the rsyslog.conf file  to open tcp and udp ports
+   #uncomment these 4 lines in the /etc/rsyslog.conf file  to open tcp and udp ports
+   # vi /etc/rsyslog.conf 
+   
 #$ModLoad imudp
 #$UDPServerRun 514
     # Provides TCP syslog reception
