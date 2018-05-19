@@ -1,9 +1,8 @@
 #To configure your clients to point at the remote log server echo the below code then restart the rsyslog service.
-
 #Important: this should be the internal not external IP of the server (10.142.0.11) 
+
 echo "*.info;mail.none;authpriv.none;cron.none   @10.142.0.11" >> /etc/rsyslog.conf && systemctl restart rsyslog.service
 
 # to test type "tail -F /var/log/messages" in your server, restart a service using systemctl restart in your client. 
 # you should see your client loggin in your rsyslog server 
-
 # echo "hello this is a test" | logger    #(this command when done in the client should appear in the server) 
