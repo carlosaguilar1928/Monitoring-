@@ -14,6 +14,7 @@ systemctl start httpd
 ln -s /repos/centos /var/www/html/centos
 cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.bak
 
+# configure apache lines 144, 145, 146 
 sed -i '144i     Options All' /etc/httpd/conf/httpd.conf
 sed -i '145i    # Disable directory index so that it will index our repos' /etc/httpd/conf/httpd.conf
 sed -i '146i     DirectoryIndex disabled' /etc/httpd/conf/httpd.conf
