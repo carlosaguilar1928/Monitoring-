@@ -22,3 +22,9 @@ else
    echo "STATUS:UNKNOWN"
    exit 3;
 fi
+
+
+
+#this file is where we will write the NRPE plugins for checks
+#this file will point to the startup file that will create RPM's 
+# once this file points the RPM creation file we can compile it into a tar.gz file that will contain the nrpe checks
