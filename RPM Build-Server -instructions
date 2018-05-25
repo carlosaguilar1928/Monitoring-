@@ -16,8 +16,9 @@ tar -cvzf nagios.tar.gz nagios.sh  		# nagios.sh is the script we just built and
 4. Change directories to the SPECS directoy edit the .spec file
 	# this file is what tells us what to do with our raw materials 
 	# edit the file  to match our SOURCE file 
-
-5. use the rpmbuild command to create the RPM
+	
+5. change directories into the RPMBUILD directory and run the rpmbuild command. 
+        # use the rpmbuild command to create the RPM
 rpmbuild -v -bb --clean SPECS/nagios.spec
 	# this points to the .spec file in the SPEC directory
 	# this will be stored in the BUILD directory
