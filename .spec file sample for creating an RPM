@@ -44,3 +44,7 @@ rm -rf %{buildroot}
 
 
 %changelog
+
+
+# location of the spec file is /build/specs
+# this is one of the five folders we created 
