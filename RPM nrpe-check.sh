@@ -28,3 +28,4 @@ fi
 #this file is where we will write the NRPE plugins for checks
 #this file will point to the startup file that will create RPM's 
 # once this file points the RPM creation file we can compile it into a tar.gz file that will contain the nrpe checks
+# file will live in the SOURCES folder of the BUILD Server. From there the .spec file in the SPECS folder will know what to do with it.
