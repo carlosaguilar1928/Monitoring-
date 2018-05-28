@@ -1,0 +1,1 @@
+postgresck=$(systemctl status postgresql | grep "active (running)" | awk '{ print $1 } ')
