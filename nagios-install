@@ -12,7 +12,7 @@ systemctl start nrpe
 yum install nagios-plugins-all
 yum install nagios-plugins-nrpe
 htpasswd -c /etc/nagios/passwd nagiosadmin
-history | cut -c 8-
+#history | cut -c 8-
 
 echo '########### NRPE CONFIG LINE #######################
 define command{
