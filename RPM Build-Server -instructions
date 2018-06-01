@@ -5,7 +5,8 @@ yum -y install rpm-build make gcc git
 mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
 3. change directories to the SOURCES directories
-cd SOURCES
+cd ~
+cd rpmbuild/SOURCES
 	# This is where we put the binaries (tar.gz) or the scripts (.sh)
 	# These are the raw materials we will use for creating the rpm 
 	# when you create a script ex. "Nagios.sh"  you have to make it into a tarball in order for our .spec file to be able to read it. 
