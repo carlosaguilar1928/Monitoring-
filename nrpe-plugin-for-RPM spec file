@@ -1,1 +1,16 @@
-postgresck=$(systemctl status postgresql | grep "active (running)" | awk '{ print $1 } ')
+#!/bin/bash
+
+postgresck=$(systemctl status postgresql | grep "active (running)" | awk '{ print $0} ') 
+postgresck=$(systemctl status postgresql | grep "disabled" | awk '{print $1} ')
+
+if [$postgresck=="0"]; then
+  echo "STATUS:OK"
+  exit 0;
+
+  elif [ $postgresck == "1"]; then
+      echo "STATUS:CRITICAL"
+      exit 1;         
+else
+   echo "STATUS:UNKNOWN"
+   exit 3;
+    
