@@ -46,11 +46,11 @@ sed -i 's/username = '\''cactiuser'\''/username = '\''cacti'\''/g' /etc/cacti/db
 sed -i 's/password = '\''cactiuser'\''/password = '\''cactipass'\''/g' /etc/cacti/db.php
 
 
-# Top open up access from your subnet, external host or anywere.  Note, anywere isn't recommended
-# If you go that route, make a security pass when you're done and tighten it down.
+# For security reasons, the Cacti web interface is accessible only to localhos
+# to allow other clients to access your Cacti changet the httpd settings for Cacti 2.4 and 2.2
 #vim /etc/httpd/conf.d/cacti.conf     
 sed -i 's/Require all granted/Allow from all/g' /etc/httpd/conf.d/cacti.conf
-sed -i 's/Require host localhost/Require all granted/g' /etc/httpd/conf.d/cacti.conf                              
+sed -i 's/Allow from localhost/Allow from all/g' /etc/httpd/conf.d/cacti.conf                              
 
 # Further bug fixes go fix php.ini and set date.timzone = America/regina in php
 sed -i 's`;date.timezone =`date.timezone = America/Regina`g' /etc/php.ini
