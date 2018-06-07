@@ -39,27 +39,24 @@ mysql cacti < /usr/share/doc/cacti-1.1.37/cacti.sql -u cacti -p
 mysql -u cacti -p cacti < /usr/share/doc/cacti-1.0.4/cacti.sql
 
 # Set database username and password in $database_username = ''; and $database_password = '';
-vim /etc/cacti/db.php           
+# vim /etc/cacti/db.php   
+sed -i 's/username = '\''cactiuser'\''/username = '\''cacti'\''/g' /etc/cacti/db.php
+sed -i 's/password = '\''cactiuser'\''/password = '\''cactipass'\''/g' /etc/cacti/db.php
 
- # Top open up access from your subnet, external host or anywere.  Note, anywere isn't recommended
- # If you go that route, make a security pass when you're done and tighten it down.
 
-vim /etc/httpd/conf.d/cacti.conf     
-                               
+# Top open up access from your subnet, external host or anywere.  Note, anywere isn't recommended
+# If you go that route, make a security pass when you're done and tighten it down.
+#vim /etc/httpd/conf.d/cacti.conf     
+sed -i 's/Require all granted/Allow from all/g' /etc/httpd/conf.d/cacti.conf
+sed -i 's/Require host localhost/Require all granted/g' /etc/httpd/conf.d/cacti.conf                              
+
+# Further bug fixes go fix php.ini and set date.timzone = America/regina in php
+sed -i 's`;date.timezone =`date.timezone = America/Regina`g' /etc/php.ini
 
 systemctl restart httpd
 sed -i 's/#//g' /etc/cron.d/cacti
 setenforce 0
 
-
-
-
-End scripty part.  Further bug fixes, you'll need to update your php.ini like so:
-[root@cacti-c etc]# diff php.ini php.ini.orig 
-878c878
-< date.timezone = America/Regina
----
-> ;date.timezone =
 
 
 
