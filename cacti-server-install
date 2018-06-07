@@ -5,19 +5,20 @@ yum install mariadb-server         # The mysql/mariadb client installs with the 
                                    
 yum install php-process php-gd php mod_php
                                    
-                    
-systemctl enable mariadb           # Enable db, apache and snmp (not cacti yet)
+# Enable db, apache and snmp (not cacti yet)                    
+systemctl enable mariadb           )
 systemctl enable httpd
 systemctl enable snmpd
 
-
-systemctl start mariadb           # Start db, apache and snmp (not cacti yet)
+# Start db, apache and snmp (not cacti yet)
+systemctl start mariadb          
 systemctl start httpd
 systemctl start snmpd
 
-mysqladmin -u root password ***                                     # Set your mysql/mariadb pasword.  here *** is your password
-                                                                    # Make a sql script to create a cacti db and grant the cacti user access to it
+# Set your mysql/mariadb pasword.  here *** is your password
+mysqladmin -u root password letmein           #this is the password                                    
 
+# Make a sql script to create a cacti db and grant the cacti user access to it
 mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql    # Transfer your local timezone info to mysql
 
 echo "create database cacti;
