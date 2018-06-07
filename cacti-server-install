@@ -6,7 +6,7 @@ yum install mariadb-server         # The mysql/mariadb client installs with the 
 yum install php-process php-gd php mod_php
                                    
 # Enable db, apache and snmp (not cacti yet)                    
-systemctl enable mariadb           )
+systemctl enable mariadb           
 systemctl enable httpd
 systemctl enable snmpd
 
@@ -16,31 +16,38 @@ systemctl start httpd
 systemctl start snmpd
 
 # Set your mysql/mariadb pasword.  here *** is your password
-mysqladmin -u root password letmein           #this is the password                                    
+mysqladmin -u root password cactipass           #this is the password                                    
 
 # Make a sql script to create a cacti db and grant the cacti user access to it
-mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql    # Transfer your local timezone info to mysql
+mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -pcactipass mysql    
 
+# Transfer your local timezone info to mysql
 echo "create database cacti;
-GRANT ALL ON cacti.* TO cacti@localhost IDENTIFIED BY 'cactipass';  # Set this to somthing better than 'cactipass'
+GRANT ALL ON cacti.* TO cacti@localhost IDENTIFIED BY 'cactipass';   # Set this to somthing better than 'cactipass'
 FLUSH privileges;
 GRANT SELECT ON mysql.time_zone_name TO cacti@localhost;            # Added to fix a timezone issue
 flush privileges;" > stuff.sql
 
+ # Run your sql script
+mysql -u root  -pcactipass < stuff.sql   
 
-mysql -u root  -p < stuff.sql    # Run your sql script
-rpm -ql cacti|grep cacti.sql     # Will list the location of the package cacti sql script
-                                 # In this case, the output is /usr/share/doc/cacti-1.0.4/cacti.sql, run that to populate your db
+# Will list the location of the package cacti sql
+rpm -ql cacti|grep cacti.sql    
+# In this case, the output is /usr/share/doc/cacti-1.0.4/cacti.sql, run that to populate your db
 mysql cacti < /usr/share/doc/cacti-1.1.37/cacti.sql -u cacti -p  
   
 mysql -u cacti -p cacti < /usr/share/doc/cacti-1.0.4/cacti.sql
-vim /etc/cacti/db.php            # Set database username and password in $database_username = ''; and $database_password = '';
 
+# Set database username and password in $database_username = ''; and $database_password = '';
+vim /etc/cacti/db.php           
 
-vim /etc/httpd/conf.d/cacti.conf     # Top open up access from your subnet, external host or anywere.  Note, anywere isn't recommended
-                                 # If you go that route, make a security pass when you're done and tighten it down.
+ # Top open up access from your subnet, external host or anywere.  Note, anywere isn't recommended
+ # If you go that route, make a security pass when you're done and tighten it down.
 
-systemctl restart httpd.service
+vim /etc/httpd/conf.d/cacti.conf     
+                               
+
+systemctl restart httpd
 sed -i 's/#//g' /etc/cron.d/cacti
 setenforce 0
 
