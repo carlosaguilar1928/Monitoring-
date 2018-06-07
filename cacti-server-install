@@ -21,7 +21,7 @@ systemctl start snmpd
 mysqladmin -u root password cactipass           #this is the password                                    
 
 # Make a sql script to create a cacti db and grant the cacti user access to it
-mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -pcactipass mysql    
+mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql    
 
 # Transfer your local timezone info to mysql
 echo "create database cacti;
@@ -31,7 +31,7 @@ GRANT SELECT ON mysql.time_zone_name TO cacti@localhost;            # Added to f
 flush privileges;" > stuff.sql
 
  # Run your sql script
-mysql -u root  -pcactipass < stuff.sql   
+mysql -u root  -p < stuff.sql   
 
 # Will list the location of the package cacti sql
 rpm -ql cacti|grep cacti.sql    
