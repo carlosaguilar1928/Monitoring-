@@ -36,7 +36,7 @@ sed -i 's/username = '\''cactiuser'\''/username = '\''cacti'\''/g' /etc/cacti/db
 sed -i 's/password = '\''cactiuser'\''/password = '\''cactipass'\''/g' /etc/cacti/db.php
 
 #  the Cacti web interface is accessible only to localhost, allow other clients 
-sed -i 's/Require host localhost/Allow from all/g' /etc/httpd/conf.d/cacti.conf
+sed -i 's/Require host localhost/Require all granted/g' /etc/httpd/conf.d/cacti.conf
 sed -i 's/Allow from localhost/Allow from all/g' /etc/httpd/conf.d/cacti.conf                              
 
 # bug fixes go fix php.ini and set date.timzone = America/regina in php
