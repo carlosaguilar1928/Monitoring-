@@ -53,9 +53,10 @@ sed -i 's/Allow from localhost/Allow from all/g' /etc/httpd/conf.d/cacti.conf
 # Further bug fixes go fix php.ini and set date.timzone = America/regina in php
 sed -i 's`;date.timezone =`date.timezone = America/Regina`g' /etc/php.ini
 
+setenforce 0
 systemctl restart httpd
 sed -i 's/#//g' /etc/cron.d/cacti
-setenforce 0
+
 
 
 
