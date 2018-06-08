@@ -1,59 +1,47 @@
 #!/bin/bash
 
-yum -y install cacti               # Installes a number of packages, including mariadb, httpd, php and so on
-yum install -y mariadb-server         # The mysql/mariadb client installs with the cacti stack but not the server
-                                   # If you want to have multiple cacti nodes, considder using the client and connecting
-                                   # to another server
-                                   
-yum install -y php-process php-gd php mod_php
-                                   
-# Enable db, apache and snmp (not cacti yet)                    
-systemctl enable mariadb           
-systemctl enable httpd
-systemctl enable snmpd
+#install all the packages necesary for cacti server
+yum -y install cacti mariadb-server php php-snmp php-process php-gd 
 
-# Start db, apache and snmp (not cacti yet)
-systemctl start mariadb          
-systemctl start httpd
-systemctl start snmpd
-
+#turn off SE linux
+setenforce 0           
+                                   
+#enable and start HTTP, SNMP and db services
+systemctl enable httpd snmpd mariadb
+systemctl start httpd snmpd mariadb
+                                   
 # Set your mysql/mariadb pasword.  here *** is your password
-mysqladmin -u root password cactipass           #this is the password                                    
+mysqladmin -u root password cactipass                                              
 
-# Make a sql script to create a cacti db and grant the cacti user access to it
-mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql    
+# grant the cacti user access to it
+mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -pcactipass mysql    
 
 # Transfer your local timezone info to mysql
 echo "create database cacti;
-GRANT ALL ON cacti.* TO cacti@localhost IDENTIFIED BY 'cactipass';   # Set this to somthing better than 'cactipass'
+GRANT ALL ON cacti.* TO cacti@localhost IDENTIFIED BY 'cactipass'; 
 FLUSH privileges;
-GRANT SELECT ON mysql.time_zone_name TO cacti@localhost;            # Added to fix a timezone issue
+
+GRANT SELECT ON mysql.time_zone_name TO cacti@localhost;           
 flush privileges;" > stuff.sql
 
  # Run your sql script
-mysql -u root  -p < stuff.sql   
+mysql -u root  -pcactipass < stuff.sql   
 
-# Will list the location of the package cacti sql
-rpm -ql cacti|grep cacti.sql    
-# In this case, the output is /usr/share/doc/cacti-1.0.4/cacti.sql, run that to populate your db
-mysql -u cacti -p cacti < /usr/share/doc/cacti-1.1.37/cacti.sql  
+# rpm -ql cacti|grep cacti.sql --Will list the location of the package cacti sql   
+# output is /usr/share/doc/cacti-1.0.4/cacti.sql, run that to populate your db
+mysql -u cacti -pcactipass cacti < /usr/share/doc/cacti-1.1.37/cacti.sql  
 
-# Set database username and password in $database_username = ''; and $database_password = '';
-# vim /etc/cacti/db.php   
+# Set database username and password in $database_username = ''; and $database_password = '';  
 sed -i 's/username = '\''cactiuser'\''/username = '\''cacti'\''/g' /etc/cacti/db.php
 sed -i 's/password = '\''cactiuser'\''/password = '\''cactipass'\''/g' /etc/cacti/db.php
 
-
-# For security reasons, the Cacti web interface is accessible only to localhos
-# to allow other clients to access your Cacti changet the httpd settings for Cacti 2.4 and 2.2
-#vim /etc/httpd/conf.d/cacti.conf     
+#  the Cacti web interface is accessible only to localhost, allow other clients 
 sed -i 's/Require host localhost/Allow from all/g' /etc/httpd/conf.d/cacti.conf
 sed -i 's/Allow from localhost/Allow from all/g' /etc/httpd/conf.d/cacti.conf                              
 
-# Further bug fixes go fix php.ini and set date.timzone = America/regina in php
+# bug fixes go fix php.ini and set date.timzone = America/regina in php
 sed -i 's`;date.timezone =`date.timezone = America/Regina`g' /etc/php.ini
 
-setenforce 0
 systemctl restart httpd
 sed -i 's/#//g' /etc/cron.d/cacti
 
