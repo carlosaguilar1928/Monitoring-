@@ -23,3 +23,4 @@ command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
 
 
 #web interface ipaddress/nagios
+#userc nagiosadmin, password nagiosadmin in /etc/nagios/passwd
